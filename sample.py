@@ -37,7 +37,7 @@ def parse_args():
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--num_files', type=int, default=10,
+    parser.add_argument('--num_files', type=int, default=1,
                         help='number of midi files to sample.')
     parser.add_argument('--file_length', type=int, default=1000,
     					help='Length of each file, measured in 16th notes.')

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-import argparse, os, pdb
+import argparse, os, pdb, random
 import pretty_midi
 import train
 import utils
-from midi2audio import FluidSynth
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -21,23 +20,7 @@ def parse_args():
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--midi_instrument_1', default='Acoustic Grand Piano',
-                        help='MIDI instrument name (or number) to use for the ' \
-                        'generated files. See https://www.midi.org/specifications/item/'\
-                        'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--midi_instrument_2', default='Acoustic Grand Piano',
-                        help='MIDI instrument name (or number) to use for the ' \
-                        'generated files. See https://www.midi.org/specifications/item/'\
-                        'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--midi_instrument_3', default='Acoustic Grand Piano',
-                        help='MIDI instrument name (or number) to use for the ' \
-                        'generated files. See https://www.midi.org/specifications/item/'\
-                        'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--midi_instrument_4', default='Acoustic Grand Piano',
-                        help='MIDI instrument name (or number) to use for the ' \
-                        'generated files. See https://www.midi.org/specifications/item/'\
-                        'gm-level-1-sound-set for a full list of instrument names.')
-    parser.add_argument('--num_files', type=int, default=1,
+    parser.add_argument('--num_files', type=int, default=10,
                         help='number of midi files to sample.')
     parser.add_argument('--file_length', type=int, default=1000,
     					help='Length of each file, measured in 16th notes.')
@@ -49,11 +32,6 @@ def parse_args():
                         help='data directory containing .mid files to use for' \
                              'seeding/priming. Required if --prime_file is not specified')
     return parser.parse_args()
-
-def midi_to_mp3(path,output):
-    # using the default sound font in 44100 Hz sample rate
-    fs = FluidSynth()
-    fs.midi_to_audio(path,output)
 
 def get_experiment_dir(experiment_dir):
 	
@@ -71,28 +49,6 @@ def get_experiment_dir(experiment_dir):
 
 	return experiment_dir
 
-
-def validate_instrument(midi_instrument):
-	try:
-    		# try and parse the instrument name as an int
-    		instrument_num = int(midi_instrument)
-    		if not (instrument_num >= 0 and instrument_num <=127):
-    			utils.log('Error: {} is not a supported instrument. Number values must be ' \
-    			      'be 0-127. Exiting'.format(midi_instrument), True)
-    			exit(1)
-    		midi_instrument = pretty_midi.program_to_instrument_name(instrument_num)
-	except ValueError as err:
-    		# if the instrument name is a string
-    		try:
-    			# validate that it can be converted to a program number
-    			_ = pretty_midi.instrument_name_to_program(midi_instrument)
-    		except ValueError as er:
-    			utils.log('Error: {} is not a valid General MIDI instrument. Exiting.'\
-    			      .format(midi_instrument), True)
-    			exit(1)
-
-	return midi_instrument
-	
 def main():
     args = parse_args()
     args.verbose = True
@@ -108,10 +64,11 @@ def main():
     		      True)
     		exit(1)
 
+    f = random.choice(os.listdir(args.data_dir))
     midi_files = [ args.prime_file ] if args.prime_file else \
-                 [ os.path.join(args.data_dir, f) for f in os.listdir(args.data_dir) \
-                 if '.mid' in f or '.midi' in f ]
+                 [ os.path.join(args.data_dir, f)]
 
+    print("Random chosen file from the dataset is:",str(midi_files))
     experiment_dir = get_experiment_dir(args.experiment_dir)
     utils.log('Using {} as --experiment_dir'.format(experiment_dir), args.verbose)
 
@@ -133,7 +90,7 @@ def main():
                                               num_threads=1,
                                               max_files_in_ram=10)
 
-    # VALIDATE INSTRUMENT: (converted into function)validate midi instrument name
+    # validate midi instrument name
     try:
     	# try and parse the instrument name as an int
     	instrument_num = int(args.midi_instrument)
@@ -143,7 +100,7 @@ def main():
     		exit(1)
     	args.midi_instrument = pretty_midi.program_to_instrument_name(instrument_num)
     except ValueError as err:
-    		# if the instrument name is a string
+    	# if the instrument name is a string
     	try:
     		# validate that it can be converted to a program number
     		_ = pretty_midi.instrument_name_to_program(args.midi_instrument)
@@ -152,92 +109,16 @@ def main():
     			      .format(args.midi_instrument), True)
     		exit(1)
 
-    try:
-    	# try and parse the instrument name as an int
-    	instrument_num = int(args.midi_instrument_1)
-    	if not (instrument_num >= 0 and instrument_num <=127):
-    		utils.log('Error: {} is not a supported instrument. Number values must be ' \
-    			      'be 0-127. Exiting'.format(args.midi_instrument_1), True)
-    		exit(1)
-    	args.midi_instrument_1 = pretty_midi.program_to_instrument_name(instrument_num)
-    except ValueError as err:
-    		# if the instrument name is a string
-    	try:
-    		# validate that it can be converted to a program number
-    		_ = pretty_midi.instrument_name_to_program(args.midi_instrument_1)
-    	except ValueError as er:
-    		utils.log('Error: {} is not a valid General MIDI instrument. Exiting.'\
-    			      .format(args.midi_instrument_1), True)
-    		exit(1)
-
-
-    try:
-    	# try and parse the instrument name as an int
-    	instrument_num = int(args.midi_instrument_2)
-    	if not (instrument_num >= 0 and instrument_num <=127):
-    		utils.log('Error: {} is not a supported instrument. Number values must be ' \
-    			      'be 0-127. Exiting'.format(args.midi_instrument_2), True)
-    		exit(1)
-    	args.midi_instrument_2 = pretty_midi.program_to_instrument_name(instrument_num)
-    except ValueError as err:
-    		# if the instrument name is a string
-    	try:
-    		# validate that it can be converted to a program number
-    		_ = pretty_midi.instrument_name_to_program(args.midi_instrument_2)
-    	except ValueError as er:
-    		utils.log('Error: {} is not a valid General MIDI instrument. Exiting.'\
-    			      .format(args.midi_instrument_2), True)
-    		exit(1)
-
-    try:
-    	# try and parse the instrument name as an int
-    	instrument_num = int(args.midi_instrument_3)
-    	if not (instrument_num >= 0 and instrument_num <=127):
-    		utils.log('Error: {} is not a supported instrument. Number values must be ' \
-    			      'be 0-127. Exiting'.format(args.midi_instrument_3), True)
-    		exit(1)
-    	args.midi_instrument_3 = pretty_midi.program_to_instrument_name(instrument_num)
-    except ValueError as err:
-    		# if the instrument name is a string
-    	try:
-    		# validate that it can be converted to a program number
-    		_ = pretty_midi.instrument_name_to_program(args.midi_instrument_3)
-    	except ValueError as er:
-    		utils.log('Error: {} is not a valid General MIDI instrument. Exiting.'\
-    			      .format(args.midi_instrument_3), True)
-    		exit(1)
-
-
-    try:
-    	# try and parse the instrument name as an int
-    	instrument_num = int(args.midi_instrument_4)
-    	if not (instrument_num >= 0 and instrument_num <=127):
-    		utils.log('Error: {} is not a supported instrument. Number values must be ' \
-    			      'be 0-127. Exiting'.format(args.midi_instrument_4), True)
-    		exit(1)
-    	args.midi_instrument_4 = pretty_midi.program_to_instrument_name(instrument_num)
-    except ValueError as err:
-    		# if the instrument name is a string
-    	try:
-    		# validate that it can be converted to a program number
-    		_ = pretty_midi.instrument_name_to_program(args.midi_instrument_4)
-    	except ValueError as er:
-    		utils.log('Error: {} is not a valid General MIDI instrument. Exiting.'\
-    			      .format(args.midi_instrument_4), True)
-    		exit(1)
-
-
     # generate 10 tracks using random seeds
     utils.log('Loading seed files...', args.verbose)
     X, y = next(seed_generator)
     generated = utils.generate(model, X, window_size, 
-    	                       args.file_length, args.num_files, args.midi_instrument,                                                               args.midi_instrument_1,args.midi_instrument_2, 
-                               args.midi_instrument_3, args.midi_instrument_4)
+    	                       args.file_length, args.num_files, args.midi_instrument)
     for i, midi in enumerate(generated):
         file = os.path.join(args.save_dir, '{}.mid'.format(i + 1))
         midi.write(file.format(i + 1))
-       # midi_to_mp3('{}.mid','{}.wav')
         utils.log('wrote midi file to {}'.format(file), True)
 
 if __name__ == '__main__':
     main()
+

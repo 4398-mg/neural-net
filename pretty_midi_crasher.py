@@ -18,6 +18,8 @@ if "--dump" in sys.argv: # command line option to choose place to leave bad MIDI
 else:
 	print "Set --dump option to choose where to move files"
 	exit() #@Ishan if you do that, you need to remove this exit()
+if bad_files_directory[-1] != "/":
+	bad_files_directory += "/"
 
 # Ensure dump directory exists
 bad_files_directory_path_components = bad_files_directory.split("/")
@@ -30,25 +32,36 @@ for dir in bad_files_directory_path_components:
 	finally:
 		validated_path += dir + "/"
 
-sample_songs = [
-	"2_ase.mid",
-	"Carulli_Concerto_Flauto_Chitarra_Orchestra_Allegro.mid"
-]
-
 # midi_data = pretty_midi.PrettyMIDI("data/classical/2_ase.mid")
 # midi_data = pretty_midi.PrettyMIDI("data/classical/Carulli_Concerto_Flauto_Chitarra_Orchestra_Allegro.mid")
 
 # Open file for log of files removed.
-bad_files_log = open("removed_files.csv", "a")
+log_file_name = "removed_files.csv"
 
+# Try every song for validity
 for song in os.listdir(songs_directory):
+	index = 0
 	try:
 		midi_data = pretty_midi.PrettyMIDI(songs_directory + song)
-	except IOError as e:
-		print "Failed to import " + song
+	except RuntimeWarning as e:
+		bad_files_log = open(log_file_name, "a")
+		print "Found bad MIDI " + song
 		bad_files_log.write(song + "\n")
+		# Close immediatedly so that interrupts don't wipe out the log.
+		bad_files_log.close()
 		shutil.move(songs_directory + song, bad_files_directory + song)
-	else:
-		print "Succeeded in importing " + song
+	# else:
+		# print "Succeeded in importing " + song
+	except Exception:
+		bad_files_log = open(log_file_name, "a")
+		print "Likely bad MIDI " + song
+		bad_files_log.write(song + "\n")
+		# Close immediatedly so that interrupts don't wipe out the log.
+		bad_files_log.close()
+		shutil.move(songs_directory + song, bad_files_directory + song)
+	finally:
+		index += 1
+		if index % 50 == 0:
+			print "chug ... chug"
 	
 bad_files_log.close()

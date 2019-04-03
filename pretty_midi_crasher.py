@@ -2,16 +2,22 @@ import os, sys, shutil
 import pretty_midi
 
 # Name directory to crawl. Cannot contain subdirectories.
-songs_directory = "data/test_cases/"
+songs_directory = "" #@Ishan: If you find it easier, you can set the variable here instead.
 if "--location" in sys.argv: # command line option to choose folder to filter
 	songs_directory = sys.argv[sys.argv.index("--location") + 1]
+else:
+	print "Set --location option to choose folder to clean."
+	exit() #@Ishan if you do that, you need to remove this exit()
 if songs_directory[-1] != "/":
 	songs_directory += "/"
 
 # Name directory to place bad files in.
-bad_files_directory = "removed/" + songs_directory
+bad_files_directory = "" #@Ishan: If you find it easier, you can set the variable here instead.
 if "--dump" in sys.argv: # command line option to choose place to leave bad MIDIs
 	bad_files_directory = sys.argv[sys.argv.index("--dump") + 1]
+else:
+	print "Set --dump option to choose where to move files"
+	exit() #@Ishan if you do that, you need to remove this exit()
 
 # Ensure dump directory exists
 bad_files_directory_path_components = bad_files_directory.split("/")
@@ -33,7 +39,7 @@ sample_songs = [
 # midi_data = pretty_midi.PrettyMIDI("data/classical/Carulli_Concerto_Flauto_Chitarra_Orchestra_Allegro.mid")
 
 # Open file for log of files removed.
-bad_files_log = open("removed_files.csv", "w")
+bad_files_log = open("removed_files.csv", "a")
 
 for song in os.listdir(songs_directory):
 	try:

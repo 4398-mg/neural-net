@@ -1,10 +1,18 @@
-import os, shutil
+import os, sys, shutil
 import pretty_midi
 
 # Name directory to crawl. Cannot contain subdirectories.
 songs_directory = "data/test_cases/"
+if "--location" in sys.argv: # command line option to choose folder to filter
+	songs_directory = sys.argv[sys.argv.index("--location") + 1]
+if songs_directory[-1] != "/":
+	songs_directory += "/"
+
 # Name directory to place bad files in.
 bad_files_directory = "removed/" + songs_directory
+if "--dump" in sys.argv: # command line option to choose place to leave bad MIDIs
+	bad_files_directory = sys.argv[sys.argv.index("--dump") + 1]
+
 # Ensure dump directory exists
 bad_files_directory_path_components = bad_files_directory.split("/")
 validated_path = ""

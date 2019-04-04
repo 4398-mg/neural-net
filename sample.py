@@ -27,19 +27,19 @@ def parse_args():
          help='directory to save generated files to. Directory will be ' \
          'created if it doesn\'t already exist. If not specified, ' \
          'files will be saved to generated/ inside --experiment_dir.')
-    parser.add_argument('--midi_instrument', default='Acoustic Grand Piano',
+    parser.add_argument('--midi_instrument', default='Electric Grand Piano',
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')
     parser.add_argument(
         '--num_files',
         type=int,
-        default=10,
+        default=1,
         help='number of midi files to sample.')
     parser.add_argument(
         '--file_length',
         type=int,
-        default=1000,
+        default=1200,
         help='Length of each file, measured in 16th notes.')
     parser.add_argument('--prime_file', type=str,
                         help='prime generated files from midi file. If not specified ' \

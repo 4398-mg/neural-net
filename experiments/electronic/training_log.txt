@@ -1,0 +1,76 @@
+[*] Found 892 midi files in data/electronic
+[*] Created experiment directory experiments/electronic
+[*] Created checkpoint directory experiments/electronic\checkpoints
+[*] Created log directory experiments/electronic\tensorboard-logs
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_1 (LSTM)                (None, 64)                49664
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 64)                0
+_________________________________________________________________
+dense_1 (Dense)              (None, 129)               8385
+_________________________________________________________________
+activation_1 (Activation)    (None, 129)               0
+=================================================================
+Total params: 58,049
+Trainable params: 58,049
+Non-trainable params: 0
+_________________________________________________________________
+None
+[*] Saved model to experiments/electronic\model.json
+C:\Users\ishan\AppData\Local\Programs\Python\Python36\lib\site-packages\keras\callbacks.py:1065: UserWarning: `epsilon` argument is deprecated and will be removed, use `min_delta` instead.
+  warnings.warn('`epsilon` argument is deprecated and '
+fitting model...
+2019-04-03 15:05:53.317654: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1484] Adding visible gpu devices: 0
+2019-04-03 15:05:53.324917: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:965] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-03 15:05:53.331798: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:971]      0
+2019-04-03 15:05:53.335759: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:984] 0:   N
+2019-04-03 15:05:53.338909: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1097] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 3072 MB memory) -> physical GPU (device: 0, name: GeForce GTX 960M, pci bus id: 0000:01:00.0, compute capability: 5.0)
+Epoch 1/10
+23053/23052 [==============================] - 1324s 57ms/step - loss: 1.2583 - acc: 0.6400 - val_loss: 2.1207 - val_acc: 0.5786
+
+Epoch 00001: saving model to experiments/electronic\checkpoints\checkpoint-epoch_001-val_acc_0.579.hdf5
+Epoch 2/10
+23053/23052 [==============================] - 1207s 52ms/step - loss: 0.6131 - acc: 0.7897 - val_loss: 2.8615 - val_acc: 0.5231
+
+Epoch 00002: saving model to experiments/electronic\checkpoints\checkpoint-epoch_002-val_acc_0.523.hdf5
+Epoch 3/10
+23053/23052 [==============================] - 1207s 52ms/step - loss: 0.3766 - acc: 0.8733 - val_loss: 3.4678 - val_acc: 0.5042
+
+Epoch 00003: saving model to experiments/electronic\checkpoints\checkpoint-epoch_003-val_acc_0.504.hdf5
+Epoch 4/10
+23053/23052 [==============================] - 1204s 52ms/step - loss: 0.2601 - acc: 0.9148 - val_loss: 3.6431 - val_acc: 0.5207
+
+Epoch 00004: saving model to experiments/electronic\checkpoints\checkpoint-epoch_004-val_acc_0.521.hdf5
+
+Epoch 00004: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
+Epoch 5/10
+23053/23052 [==============================] - 1209s 52ms/step - loss: 0.1404 - acc: 0.9574 - val_loss: 3.9298 - val_acc: 0.5152
+
+Epoch 00005: saving model to experiments/electronic\checkpoints\checkpoint-epoch_005-val_acc_0.515.hdf5
+Epoch 6/10
+23053/23052 [==============================] - 1264s 55ms/step - loss: 0.1140 - acc: 0.9661 - val_loss: 4.2517 - val_acc: 0.5051
+
+Epoch 00006: saving model to experiments/electronic\checkpoints\checkpoint-epoch_006-val_acc_0.505.hdf5
+Epoch 7/10
+23053/23052 [==============================] - 1238s 54ms/step - loss: 0.1016 - acc: 0.9700 - val_loss: 4.4211 - val_acc: 0.5003
+
+Epoch 00007: saving model to experiments/electronic\checkpoints\checkpoint-epoch_007-val_acc_0.500.hdf5
+
+Epoch 00007: ReduceLROnPlateau reducing learning rate to 0.0002500000118743628.
+Epoch 8/10
+23053/23052 [==============================] - 1212s 53ms/step - loss: 0.0718 - acc: 0.9802 - val_loss: 4.5082 - val_acc: 0.5033
+
+Epoch 00008: saving model to experiments/electronic\checkpoints\checkpoint-epoch_008-val_acc_0.503.hdf5
+Epoch 9/10
+23053/23052 [==============================] - 1199s 52ms/step - loss: 0.0661 - acc: 0.9821 - val_loss: 4.7513 - val_acc: 0.4952
+
+Epoch 00009: saving model to experiments/electronic\checkpoints\checkpoint-epoch_009-val_acc_0.495.hdf5
+Epoch 10/10
+23053/23052 [==============================] - 1189s 52ms/step - loss: 0.0621 - acc: 0.9831 - val_loss: 4.6672 - val_acc: 0.5026
+
+Epoch 00010: saving model to experiments/electronic\checkpoints\checkpoint-epoch_010-val_acc_0.503.hdf5
+
+Epoch 00010: ReduceLROnPlateau reducing learning rate to 0.0001250000059371814.
+[*] Finished in 12254.55 seconds

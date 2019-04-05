@@ -1,4 +1,6 @@
 venv/
+experiments/*
+!experiments/.gitkeep
 *.pyc
 *.midi
 */

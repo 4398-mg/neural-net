@@ -3,16 +3,8 @@ import argparse, os, pdb, random
 import pretty_midi
 from subprocess import Popen, PIPE
 import time
-
-try:
-    from . import train
-except ImportError:
-    import train
-
-try:
-    from . import utils
-except:
-    import utils
+import train
+import utils
 
 
 def parse_args():
@@ -27,7 +19,7 @@ def parse_args():
          help='directory to save generated files to. Directory will be ' \
          'created if it doesn\'t already exist. If not specified, ' \
          'files will be saved to generated/ inside --experiment_dir.')
-    parser.add_argument('--midi_instrument', default='Electric Grand Piano',
+    parser.add_argument('--midi_instrument', default='Acoustic Grand Piano',
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')
@@ -112,11 +104,11 @@ def main(args=None):
                     args.prime_file), True)
             return None
 
-    f = random.choice(os.listdir(args.data_dir))
+    #f = random.choice(os.listdir(args.data_dir))
     midi_files = [ args.prime_file ] if args.prime_file else \
-                 [ os.path.join(args.data_dir, f)]
-
-    print("Random chosen file from the dataset is:", str(midi_files))
+                 [ os.path.join(args.data_dir, f) for f in os.listdir(args.data_dir) \
+                 if '.mid' in f or '.midi' in f ]
+    #print("Random chosen file from the dataset is:", str(midi_files))
     experiment_dir = get_experiment_dir(args.experiment_dir)
     utils.log('Using {} as --experiment_dir'.format(experiment_dir),
               args.verbose)

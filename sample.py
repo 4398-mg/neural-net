@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, os, pdb, random
+import argparse, os, pdb, random, sys
 import pretty_midi
 from subprocess import Popen, PIPE
 import time
@@ -31,7 +31,7 @@ def parse_args():
     parser.add_argument(
         '--file_length',
         type=int,
-        default=1200,
+        default= 300,
         help='Length of each file, measured in 16th notes.')
     parser.add_argument('--prime_file', type=str,
                         help='prime generated files from midi file. If not specified ' \
@@ -40,6 +40,11 @@ def parse_args():
     parser.add_argument('--data_dir', type=str, default='data/midi',
                         help='data directory containing .mid files to use for' \
                              'seeding/priming. Required if --prime_file is not specified')
+    parser.add_argument(
+        '--tempo',
+        type=int,
+        default=3,
+        help='set tempo 0 is slowest and 5 is highest.')
     return parser.parse_args()
 
 
@@ -90,7 +95,7 @@ def main(args=None):
     else:
         args = argparse.Namespace(**args)
     args.verbose = True
-
+    
     # prime file validation
     if args.prime_file and not os.path.exists(args.prime_file):
         utils.log(
@@ -153,11 +158,13 @@ def main(args=None):
                    .format(args.midi_instrument), True)
             return None
 
+    args.file_length =args.file_length*(args.tempo + 1)
+
     # generate 10 tracks using random seeds
     utils.log('Loading seed files...', args.verbose)
     X, y = next(seed_generator)
     generated = utils.generate(model, X, window_size, args.file_length,
-                               args.num_files, args.midi_instrument)
+                               args.num_files, args.midi_instrument, args.tempo)
     for i, midi in enumerate(generated):
         file = os.path.join(args.save_dir, '{}.mid'.format(i + 1))
         midi.write(file.format(i + 1))

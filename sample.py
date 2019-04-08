@@ -3,9 +3,16 @@ import argparse, os, pdb, random, sys
 import pretty_midi
 from subprocess import Popen, PIPE
 import time
-import train
-import utils
 
+try:
+    from . import train
+except ImportError:
+    import train
+
+try:
+    from . import utils
+except:
+    import utils
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -136,7 +143,7 @@ def main(args=None):
         window_size=window_size,
         batch_size=32,
         num_threads=1,
-        max_files_in_ram=10)
+        max_files_in_ram=5)
 
     # validate midi instrument name
     try:

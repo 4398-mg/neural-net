@@ -26,7 +26,7 @@ def parse_args():
          help='directory to save generated files to. Directory will be ' \
          'created if it doesn\'t already exist. If not specified, ' \
          'files will be saved to generated/ inside --experiment_dir.')
-    parser.add_argument('--midi_instrument', default='Acoustic Grand Piano',
+    parser.add_argument('--midi_instrument', default='Bright Acoustic Piano',
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')

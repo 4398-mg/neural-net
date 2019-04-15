@@ -52,6 +52,11 @@ def parse_args():
         type=int,
         default=3,
         help='set tempo 0 is slowest and 5 is highest.')
+    parser.add_argument(
+        '--pitch',
+        type=int,
+        default=0,
+        help='adjust pitch with negative or positive integer')
     return parser.parse_args()
 
 
@@ -171,7 +176,7 @@ def main(args=None):
     utils.log('Loading seed files...', args.verbose)
     X, y = next(seed_generator)
     generated = utils.generate(model, X, window_size, args.file_length,
-                               args.num_files, args.midi_instrument, args.tempo)
+                               args.num_files, args.midi_instrument, args.tempo, args.pitch)
     for i, midi in enumerate(generated):
         file = os.path.join(args.save_dir, '{}.mid'.format(i + 1))
         midi.write(file.format(i + 1))

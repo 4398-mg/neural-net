@@ -25,7 +25,7 @@ python train.py [--data_dir GENRE] [--experiment_dir GENRE]
 
 ### usage: 
 ```bash
-python sample.py [--data_dir DATA_DIR][--experiment_dir EXPERIMENT_DIR]             
+python sample.py [--data_dir GENRE][--experiment_dir GENRE]             
 ```
 ### optional arguments:
 ```bash

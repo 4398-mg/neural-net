@@ -5,6 +5,7 @@
 ### usage: 
 ```bash
 python train.py [--data_dir GENRE] [--experiment_dir GENRE]
+example: python train.py --data_dir data/classical --experiment_dir experiments/classical
 ```
 ### optional arguments:
 ```bash
@@ -25,7 +26,8 @@ python train.py [--data_dir GENRE] [--experiment_dir GENRE]
 
 ### usage: 
 ```bash
-python sample.py [--data_dir GENRE][--experiment_dir GENRE]             
+python sample.py [--data_dir GENRE][--experiment_dir GENRE]
+example: python sample.py --data_dir data/classical --experiment_dir experiments/classical
 ```
 ### optional arguments:
 ```bash

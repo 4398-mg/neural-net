@@ -36,4 +36,5 @@ python sample.py [--data_dir GENRE][--experiment_dir GENRE]
 [--tempo TEMPO]
 [--pitch  PITCH ADJUSTMENT(add or substract)]
 ```
-
+### List of instruments:
+https://www.midi.org/specifications-old/item/gm-level-1-sound-set

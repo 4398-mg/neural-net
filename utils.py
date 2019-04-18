@@ -136,7 +136,7 @@ def load_model_from_checkpoint(model_dir):
 
     return model, epoch
 
-def generate(model, seeds, window_size, length, num_to_gen, instrument_name, tempo, pitch_adj):
+def generate(model, seeds, window_size, length, num_to_gen, instrument_name, tempo, pitch_adj, drum):
     
     # generate a pretty midi file from a model using a seed
     def _gen(model, seed, window_size, length):
@@ -166,12 +166,12 @@ def generate(model, seeds, window_size, length, num_to_gen, instrument_name, tem
     for i in range(0, num_to_gen):
         seed = seeds[random.randint(0, len(seeds) - 1)]
         gen = _gen(model, seed, window_size, length)
-        midis.append(_network_output_to_midi(gen, tempo, pitch_adj, instrument_name))
+        midis.append(_network_output_to_midi(gen, tempo, pitch_adj, drum, instrument_name))
     return midis
 
 # create a pretty midi file with a single instrument using the one-hot encoding
 # output of keras model.predict.
-def _network_output_to_midi(windows, tempo, pitch_adj,
+def _network_output_to_midi(windows, tempo, pitch_adj, drum,
                            instrument_name='Acoustic Grand Piano', 
                            allow_represses=False):
 
@@ -179,8 +179,10 @@ def _network_output_to_midi(windows, tempo, pitch_adj,
     midi = pretty_midi.PrettyMIDI()
     # Create an Instrument instance for a cello instrument
     instrument_program = pretty_midi.instrument_name_to_program(instrument_name)
-    instrument = pretty_midi.Instrument(program=instrument_program)
-    
+    if drum == 'True':
+        instrument = pretty_midi.Instrument(program=instrument_program, is_drum=True)
+    else:
+        instrument = pretty_midi.Instrument(program=instrument_program)
     cur_note = None # an invalid note to start with
     cur_note_start = None
     clock = 0

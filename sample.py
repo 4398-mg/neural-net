@@ -57,6 +57,9 @@ def parse_args():
         type=int,
         default=0,
         help='adjust pitch with negative or positive integer')
+    parser.add_argument('--drum', type=str,
+                        default='False',
+                        help='input True to enable the drums. Else keep it False')
     return parser.parse_args()
 
 
@@ -176,7 +179,7 @@ def main(args=None):
     utils.log('Loading seed files...', args.verbose)
     X, y = next(seed_generator)
     generated = utils.generate(model, X, window_size, args.file_length,
-                               args.num_files, args.midi_instrument, args.tempo, args.pitch)
+                               args.num_files, args.midi_instrument, args.tempo, args.pitch, args.drum)
     for i, midi in enumerate(generated):
         file = os.path.join(args.save_dir, '{}.mid'.format(i + 1))
         midi.write(file.format(i + 1))

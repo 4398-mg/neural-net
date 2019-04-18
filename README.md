@@ -37,6 +37,7 @@ example: python sample.py --data_dir data/classical --experiment_dir experiments
 [--save_dir SAVE_DIR]
 [--tempo TEMPO]
 [--pitch  PITCH ADJUSTMENT(add or substract)]
+[--drum True/False]
 ```
 ### List of instruments:
 https://www.midi.org/specifications-old/item/gm-level-1-sound-set

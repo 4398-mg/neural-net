@@ -1,11 +1,18 @@
 #!/usr/bin/env python
-import argparse, os, pdb, random
+import argparse, os, pdb, random, sys
 import pretty_midi
 from subprocess import Popen, PIPE
 import time
-import train
-import utils
 
+try:
+    from . import train
+except ImportError:
+    import train
+
+try:
+    from . import utils
+except:
+    import utils
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -19,7 +26,7 @@ def parse_args():
          help='directory to save generated files to. Directory will be ' \
          'created if it doesn\'t already exist. If not specified, ' \
          'files will be saved to generated/ inside --experiment_dir.')
-    parser.add_argument('--midi_instrument', default='Acoustic Grand Piano',
+    parser.add_argument('--midi_instrument', default='Bright Acoustic Piano',
                         help='MIDI instrument name (or number) to use for the ' \
                         'generated files. See https://www.midi.org/specifications/item/'\
                         'gm-level-1-sound-set for a full list of instrument names.')
@@ -31,7 +38,7 @@ def parse_args():
     parser.add_argument(
         '--file_length',
         type=int,
-        default=1200,
+        default= 300,
         help='Length of each file, measured in 16th notes.')
     parser.add_argument('--prime_file', type=str,
                         help='prime generated files from midi file. If not specified ' \
@@ -40,6 +47,19 @@ def parse_args():
     parser.add_argument('--data_dir', type=str, default='data/midi',
                         help='data directory containing .mid files to use for' \
                              'seeding/priming. Required if --prime_file is not specified')
+    parser.add_argument(
+        '--tempo',
+        type=int,
+        default=3,
+        help='set tempo 0 is slowest and 5 is highest.')
+    parser.add_argument(
+        '--pitch',
+        type=int,
+        default=0,
+        help='adjust pitch with negative or positive integer')
+    parser.add_argument('--drum', type=str,
+                        default='False',
+                        help='input True to enable the drums. Else keep it False')
     return parser.parse_args()
 
 
@@ -90,7 +110,7 @@ def main(args=None):
     else:
         args = argparse.Namespace(**args)
     args.verbose = True
-
+    
     # prime file validation
     if args.prime_file and not os.path.exists(args.prime_file):
         utils.log(
@@ -131,7 +151,7 @@ def main(args=None):
         window_size=window_size,
         batch_size=32,
         num_threads=1,
-        max_files_in_ram=10)
+        max_files_in_ram=5)
 
     # validate midi instrument name
     try:
@@ -153,11 +173,13 @@ def main(args=None):
                    .format(args.midi_instrument), True)
             return None
 
+    args.file_length =args.file_length*(args.tempo + 1)
+
     # generate 10 tracks using random seeds
     utils.log('Loading seed files...', args.verbose)
     X, y = next(seed_generator)
     generated = utils.generate(model, X, window_size, args.file_length,
-                               args.num_files, args.midi_instrument)
+                               args.num_files, args.midi_instrument, args.tempo, args.pitch, args.drum)
     for i, midi in enumerate(generated):
         file = os.path.join(args.save_dir, '{}.mid'.format(i + 1))
         midi.write(file.format(i + 1))

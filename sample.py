@@ -4,15 +4,9 @@ import pretty_midi
 from subprocess import Popen, PIPE
 import time
 
-try:
-    from . import train
-except ImportError:
-    import train
+import train
 
-try:
-    from . import utils
-except:
-    import utils
+import utils
 
 def parse_args():
     parser = argparse.ArgumentParser(

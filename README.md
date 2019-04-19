@@ -1,5 +1,11 @@
 # neural-net
 
+## Setup:
+Use pip to set all libraries to expected version (may need sudo if not using virtual environment)
+```bash
+pip install -r requirements.txt
+```
+
 ## Training:
 
 ### usage: 

@@ -5,14 +5,14 @@ from subprocess import Popen, PIPE
 import time
 
 try:
-    from . import train
-except ImportError:
     import train
+except ImportError:
+    from . import train
 
 try:
-    from . import utils
-except:
     import utils
+except:
+    from . import utils
 
 def parse_args():
     parser = argparse.ArgumentParser(
